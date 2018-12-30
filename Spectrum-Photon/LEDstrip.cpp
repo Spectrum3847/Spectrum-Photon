@@ -144,7 +144,7 @@ class LEDstrip
         }
       break;
 
-      //Alternating half blinking alarm WIP
+      //SIREN: Alternating half blinking alarm WIP
       case(5):
         if (state){
         for(int i = 0; i < numberLEDs /2; i++) {
@@ -164,7 +164,25 @@ class LEDstrip
        }
 
        break;
-       
+
+      //Odd/even
+      case (6):
+       if (state){
+          for(int i =0; i < numberLEDs; i = i +2){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i =1; i < numberLEDs; i = i +2){
+            l[i] = CHSV(color2, saturation2, 255);
+          }
+       } else{
+          for(int i =0; i < numberLEDs; i = i +2){
+            l[i] = CHSV(color2, saturation2, 255);
+          }
+          for(int i =1; i < numberLEDs; i = i +2){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+       }
+      break;
       //Pulse black to color
       case(10):
       {
@@ -245,10 +263,10 @@ class LEDstrip
       //Cylon 1 Color
       case(20):
         if (state){
-          // Set the i'th led to red 
+          // Set the i'th led to color 1
           l[sequence] = CHSV(color1, saturation1, 255);
         } else{
-          l[numberLEDs-sequence] = CHSV(color1, 255, 255);
+          l[numberLEDs-sequence] = CHSV(color1, saturation1, 255);
         }
       break;
       
@@ -321,6 +339,155 @@ class LEDstrip
         }
       break;
 
+      //Color Wipe fwd
+      case(32):
+        for(int i = 0; i <= sequence; i++){
+          l[i] = CHSV(color1, saturation1, 255);
+        }
+      break;
+
+      //Color Wipe rev
+      case(33):
+        for(int i = numberLEDs; i >= numberLEDs - sequence; i--){
+          l[i-1] = CHSV(color1, saturation1, 255);
+        }
+      break;
+      
+      //Color Wipe fwd-rev
+      case(34):
+        if (state){
+          // Set the i'th led to red 
+          for(int i = 0; i <= sequence; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+        } else{
+          for(int i = numberLEDs; i >= numberLEDs - sequence; i--){
+            l[i-1] = CHSV(color1, saturation1, 255);
+          }
+        }
+      break;
+
+      //Color Wipe Down
+      case(35):
+        if (sequence != 0){
+          for(int i = 0; i <= numberLEDs - sequence; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+        }
+      break;
+
+      //Color Wipe Up-Down
+      case(36):
+        if (state){
+          // Set the i'th led to red 
+          for(int i = 0; i <= sequence; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+        } else{
+          for(int i = 0; i <= numberLEDs - sequence; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+        }
+      break;
+
+      //Color Wipe Up-Down Dual Color
+      case(37):
+        if (state){
+          // Set the i'th led to red 
+          for(int i = 0; i <= sequence; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = sequence; i < numberLEDs; i++){
+            l[i+1] = CHSV(color2, saturation2, 255);
+          }
+        } else{
+          for(int i = 0; i <= numberLEDs - sequence; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs - sequence; i < numberLEDs; i++){
+            l[i+1] = CHSV(color2, saturation2, 255);
+          }
+        }
+      break;
+
+      
+      //Color Wipe In from Sides
+      case(38):
+          for(int i = 0; i <= sequence / 2; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs; i >= numberLEDs - (sequence/2); i--){
+            l[i-1] = CHSV(color1, saturation1, 255);
+          }
+      break;
+
+      //Color Wipe In and out from Sides
+      case(39):
+        if (state){
+          for(int i = 0; i <=sequence / 2; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs; i >= numberLEDs - (sequence/2); i--){
+            l[i-1] = CHSV(color1, saturation1, 255);
+          }
+        } else{
+          for(int i = 0; i <= (numberLEDs - sequence) / 2; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs; i >= numberLEDs/2 + (sequence/2); i--){
+            l[i-1] = CHSV(color1, saturation1, 255);
+          }
+        }
+      break;
+
+      //Color Wipe In and out and back from Sides
+      case(40):
+      if (!state2){
+        if (!state){
+          for(int i = 0; i <=sequence / 2; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs; i >= numberLEDs - (sequence/2); i--){
+            l[i-1] = CHSV(color1, saturation1, 255);
+          }
+        } else{
+          for(int i = numberLEDs/2; i >= sequence/2; i--){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs/2; i <= numberLEDs - sequence/2; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+        }
+      } else {
+        if (!state){
+          for(int i = numberLEDs/2; i >= numberLEDs/2 - (sequence/2); i--){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs/2; i <= numberLEDs/2 + (sequence/2); i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+        } else{
+          for(int i = 0; i <= (numberLEDs - sequence) / 2; i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs; i >= numberLEDs/2 + (sequence/2); i--){
+            l[i-1] = CHSV(color1, saturation1, 255);
+          }
+        }
+      }
+      break;
+
+      //Percentage
+      case(97):{
+        int p = color2;
+        if (p > 100){
+          p = 100;
+        }
+        for(int i = 0; i <= (numberLEDs * p) / 100 ; i++){
+          l[i] = CHSV(color1, saturation1, 255);
+        }
+      break;
+      }
       
       //Juggle: eight colored dots moving out of sync
       case(98):{
