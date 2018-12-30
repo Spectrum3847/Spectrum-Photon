@@ -412,7 +412,7 @@ class LEDstrip
 
       
       //Color Wipe In from Sides
-      case(38):
+      case(40):
           for(int i = 0; i <= sequence / 2; i++){
             l[i] = CHSV(color1, saturation1, 255);
           }
@@ -421,8 +421,17 @@ class LEDstrip
           }
       break;
 
+      //Fill from middle
+      case(41):
+          for(int i = numberLEDs/2; i >= numberLEDs/2 - (sequence/2); i--){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+          for(int i = numberLEDs/2; i <= numberLEDs/2 + (sequence/2); i++){
+            l[i] = CHSV(color1, saturation1, 255);
+          }
+      break;
       //Color Wipe In and out from Sides
-      case(39):
+      case(42):
         if (state){
           for(int i = 0; i <=sequence / 2; i++){
             l[i] = CHSV(color1, saturation1, 255);
@@ -441,7 +450,7 @@ class LEDstrip
       break;
 
       //Color Wipe In and out and back from Sides
-      case(40):
+      case(43):
       if (!state2){
         if (!state){
           for(int i = 0; i <=sequence / 2; i++){
