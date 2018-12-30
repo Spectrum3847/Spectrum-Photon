@@ -183,6 +183,24 @@ class LEDstrip
           }
        }
       break;
+
+      //Theater Chase
+      //Every third led on
+      case (7):{
+        for(int i = 0; i <numberLEDs; i = i+3){
+          l[i+(sequence%3)] = CHSV(color1, saturation1, 255);
+        }
+        break;
+      }
+
+      //Reverse Theater Chase
+      case (8):{
+        for(int i = 2; i <numberLEDs; i = i+3){
+          l[i-(sequence%3)] = CHSV(color1, saturation1, 255);
+        }
+        break;
+      }
+      
       //Pulse black to color
       case(10):
       {
@@ -321,11 +339,40 @@ class LEDstrip
         }
       break;
 
+      //Cylon In from Sides
+      case(24):
+        if (state){
+          l[sequence / 2] = CHSV(color1, saturation1, 255);
+          l[numberLEDs - (sequence/2)] = CHSV(color1, saturation1, 255);
+        } else {
+          l[numberLEDs/2 - sequence / 2] = CHSV(color1, saturation1, 255);
+          l[numberLEDs/2 + (sequence/2)] = CHSV(color1, saturation1, 255);
+        }
+      break;
 
+      //Cylon In from Sides Dual
+      case(25):
+        if (!state2){
+          if (!state){
+            l[sequence / 2] = CHSV(color1, saturation1, 255);
+            l[numberLEDs - (sequence/2)] = CHSV(color1, saturation1, 255);
+          } else {
+            l[numberLEDs/2 - sequence / 2] = CHSV(color1, saturation1, 255);
+            l[numberLEDs/2 + (sequence/2)] = CHSV(color1, saturation1, 255);
+          }
+        } else {
+           if (!state){
+            l[sequence / 2] = CHSV(color2, saturation2, 255);
+            l[numberLEDs - (sequence/2)] = CHSV(color2, saturation2, 255);
+          } else {
+            l[numberLEDs/2 - sequence / 2] = CHSV(color2, saturation2, 255);
+            l[numberLEDs/2 + (sequence/2)] = CHSV(color2, saturation2, 255);
+          }         
+        }
+      break;
       
       //Tracer
       case(30):
-        // Set the i'th led to red 
         l[sequence] = CHSV(color1, saturation1, 255);
       break;
 
@@ -379,7 +426,6 @@ class LEDstrip
       //Color Wipe Up-Down
       case(36):
         if (state){
-          // Set the i'th led to red 
           for(int i = 0; i <= sequence; i++){
             l[i] = CHSV(color1, saturation1, 255);
           }
@@ -430,6 +476,7 @@ class LEDstrip
             l[i] = CHSV(color1, saturation1, 255);
           }
       break;
+      
       //Color Wipe In and out from Sides
       case(42):
         if (state){
@@ -485,7 +532,21 @@ class LEDstrip
         }
       }
       break;
-
+      
+      //rainbow
+      case(96):{
+        for(int i = 0; i < numberLEDs; i++){
+          //Shift more red into the rainbow and removes some of the pink at the top end
+          int c = (235*((sequence+i)%numberLEDs))/numberLEDs;
+          c = c - 20;
+          if (c < 0){
+            c = 0;
+          }
+          l[i] = CHSV(c,255, 255);
+        }
+      break;
+      }
+      
       //Percentage
       case(97):{
         int p = color2;
@@ -533,4 +594,5 @@ class LEDstrip
     //////////////////////////////////
 
   }
+
 };
