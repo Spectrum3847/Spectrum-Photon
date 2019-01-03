@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.SerialPort.Port;
 /**
  * Used to command a Teensy running the photon LED control library.
  * Commands the Photon library are just strings of comma seperated numbers with a semicolon at the end
- * 2 = SetAnimation=  2, StrandNumber, Animation, Color1, Color2, rate, fade; 
+ * 2 = SetAnimation=  2, StripNumber, Animation, Color1, Color2, rate, fade; 
  *              You can leave off values and defaults will be set for the rest of the values
- * 3 = SetNumberOfLeds = 3, StrandNumber, NumberOfLEDsInStrand
+ * 3 = SetNumberOfLeds = 3, StripNumber, NumberOfLEDsInStrip
  *  
  * Color Chart = 
     Red (0..)
@@ -51,9 +51,10 @@ public class Photon {
     {
         OFF, SOLID, SOLID_DUAL, BLINK, BLINK_DUAL, SIREN,
         PULSE_TO_BLACK, PULSE_TO_WHITE, FADE_ALTERNATE, PULSE_DUAL,
-        CYLON, CYLON_DUAL, BOUNCE_BAR, BOUNCE_BAR_DUAL,
-        TRACER, TRACER_ALTERNATE,
-        JUGGLE, SPARKLES
+        CYLON, CYLON_DUAL, BOUNCE_BAR, BOUNCE_BAR_DUAL, CYLON_MIDDLE, CYLON_MIDDLE_DUAL,
+        TRACER, TRACER_ALTERNATE, WIPE_FWD, WIPE_REV, WIPE_FWD_REV, WIPE_DOWN, WIPE_UP_DOWN, WIPE_UP_DOWN_DUAL,
+        WIPE_OUT, WIPE_IN, WIPE_IN_OUT, WIPE_IN_OUT_BACK,
+        PERCENTAGE, RAINBOW, JUGGLE, SPARKLES
         ;
     }
 
@@ -70,47 +71,47 @@ public class Photon {
 
     //Build out more construcitons to set default colors, etc
 
-    //Set how many LEDs are in one of the strands, call this for each strand that you want to use.
-    public void SetNumberOfLEDs(int StrandNum, int LEDcount){
-        usb.writeString("3," + StrandNum +","+ LEDcount + ";");
+    //Set how many LEDs are in one of the strips, call this for each strip that you want to use.
+    public void SetNumberOfLEDs(int StripNum, int LEDcount){
+        usb.writeString("3," + StripNum +","+ LEDcount + ";");
     }
 
-    //Set a new animation on a strand, must include a strand number all other values are optional and can be set seperatly.
-    public void setAnimation(int StrandNum, Integer... vals){//int Animation, int Color1, int Color2, int rate, int fade){
+    //Set a new animation on a strip, must include a strip number all other values are optional and can be set seperatly.
+    public void setAnimation(int StripNum, Integer... vals){//int Animation, int Color1, int Color2, int rate, int fade){
         Integer Animation = vals.length > 0 ? vals[0] : this.kAnimation;
         Integer Color1 = vals.length > 1 ? vals[1] : this.kColor1;
         Integer Color2 = vals.length > 2 ? vals[2] : this.kColor2;
         Integer Rate = vals.length > 3 ? vals[3] : this.kRate;
         Integer Fade = vals.length > 4 ? vals[4] : this.kFade;
-        usb.writeString("2," + StrandNum +","+ Animation +","+ Color1 +","+ Color2 +","+ Rate +","+ Fade + ";");
+        usb.writeString("2," + StripNum +","+ Animation +","+ Color1 +","+ Color2 +","+ Rate +","+ Fade + ";");
     }
 
-    public void setAnimation(int StrandNum, Animation a, Color c1, Color c2, int rate, int fade){
-        setAnimation(StrandNum, getAnimation(a), getColor(c1), getColor(c2), rate, fade);
+    public void setAnimation(int StripNum, Animation a, Color c1, Color c2, int rate, int fade){
+        setAnimation(StripNum, getAnimation(a), getColor(c1), getColor(c2), rate, fade);
     }
 
-    public void setAnimation(int StrandNum, Animation a, Color c1, Color c2, int rate){
-        setAnimation(StrandNum, getAnimation(a), getColor(c1), getColor(c2), rate);
+    public void setAnimation(int StripNum, Animation a, Color c1, Color c2, int rate){
+        setAnimation(StripNum, getAnimation(a), getColor(c1), getColor(c2), rate);
     }   
 
-    public void setAnimation(int StrandNum, Animation a, Color c1, Color c2){
-        setAnimation(StrandNum, getAnimation(a), getColor(c1), getColor(c2));
+    public void setAnimation(int StripNum, Animation a, Color c1, Color c2){
+        setAnimation(StripNum, getAnimation(a), getColor(c1), getColor(c2));
     } 
 
-    public void setAnimation(int StrandNum, Animation a, Color c1){
-        setAnimation(StrandNum, getAnimation(a), getColor(c1));
+    public void setAnimation(int StripNum, Animation a, Color c1){
+        setAnimation(StripNum, getAnimation(a), getColor(c1));
     } 
 
-    public void setAnimation(int StrandNum, Animation a, Color c1, int rate, int fade){ //Allows only a single color to be set
-        setAnimation(StrandNum, getAnimation(a), getColor(c1), kColor2, rate, fade);
+    public void setAnimation(int StripNum, Animation a, Color c1, int rate, int fade){ //Allows only a single color to be set
+        setAnimation(StripNum, getAnimation(a), getColor(c1), kColor2, rate, fade);
     } 
 
-    public void setAnimation(int StrandNum, Animation a, Color c1, int rate){ //Allows only a single color to be set but you can adjust the rate
-        setAnimation(StrandNum, getAnimation(a), getColor(c1), kColor2, rate);
+    public void setAnimation(int StripNum, Animation a, Color c1, int rate){ //Allows only a single color to be set but you can adjust the rate
+        setAnimation(StripNum, getAnimation(a), getColor(c1), kColor2, rate);
     } 
 
-    public void setAnimation(int StrandNum, Animation a){
-        setAnimation(StrandNum, getAnimation(a));
+    public void setAnimation(int StripNum, Animation a){
+        setAnimation(StripNum, getAnimation(a));
     } 
     
     //Reset all the values to your default values, useful if you want an animation to use default values, but they may have been already changed.
@@ -177,10 +178,38 @@ public class Photon {
                 return 22;
             case BOUNCE_BAR_DUAL:
                 return 23;
+            case CYLON_MIDDLE:
+                return 24;
+            case CYLON_MIDDLE_DUAL:
+                return 25;
             case TRACER:
                 return 30;
             case TRACER_ALTERNATE:
                 return 31;
+            case WIPE_FWD:
+                return 32;
+            case WIPE_REV:
+                return 33;
+            case WIPE_FWD_REV:
+                return 34;
+            case WIPE_DOWN:
+                return 35;
+            case WIPE_UP_DOWN:
+                return 36;
+            case WIPE_UP_DOWN_DUAL:
+                return 37;
+            case WIPE_OUT:
+                return 40;
+            case WIPE_IN:
+                return 41;
+            case WIPE_IN_OUT:
+                return 42;
+            case WIPE_IN_OUT_BACK:
+                return 43;
+            case RAINBOW:
+                return 96;
+            case PERCENTAGE:
+                return 97;
             case JUGGLE:
                 return 98;
             case SPARKLES:

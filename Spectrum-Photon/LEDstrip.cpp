@@ -371,12 +371,12 @@ class LEDstrip
         }
       break;
       
-      //Tracer
+      //TRACER
       case(30):
         l[sequence] = CHSV(color1, saturation1, 255);
       break;
 
-      //Tracer 2 Color
+      //TRACER_ALTERNATE - 2 Colors
       case(31):
         if (state){
           // Set the sequence led to color1 
@@ -386,21 +386,21 @@ class LEDstrip
         }
       break;
 
-      //Color Wipe fwd
+      //WIPE_FWD
       case(32):
         for(int i = 0; i <= sequence; i++){
           l[i] = CHSV(color1, saturation1, 255);
         }
       break;
 
-      //Color Wipe rev
+      //WIPE_REV
       case(33):
         for(int i = numberLEDs; i >= numberLEDs - sequence; i--){
           l[i-1] = CHSV(color1, saturation1, 255);
         }
       break;
       
-      //Color Wipe fwd-rev
+      //WIPE_FWD_REV
       case(34):
         if (state){
           // Set the i'th led to red 
@@ -414,7 +414,7 @@ class LEDstrip
         }
       break;
 
-      //Color Wipe Down
+      //WIPE_DOWN
       case(35):
         if (sequence != 0){
           for(int i = 0; i <= numberLEDs - sequence; i++){
@@ -423,7 +423,7 @@ class LEDstrip
         }
       break;
 
-      //Color Wipe Up-Down
+      //WIPE_UP_DOWN
       case(36):
         if (state){
           for(int i = 0; i <= sequence; i++){
@@ -436,7 +436,7 @@ class LEDstrip
         }
       break;
 
-      //Color Wipe Up-Down Dual Color
+      //WIPE_UP_DOWN_DUAL
       case(37):
         if (state){
           // Set the i'th led to red 
@@ -457,7 +457,7 @@ class LEDstrip
       break;
 
       
-      //Color Wipe In from Sides
+      //WIPE_IN
       case(40):
           for(int i = 0; i <= sequence / 2; i++){
             l[i] = CHSV(color1, saturation1, 255);
@@ -467,7 +467,7 @@ class LEDstrip
           }
       break;
 
-      //Fill from middle
+      //WIPE_OUT
       case(41):
           for(int i = numberLEDs/2; i >= numberLEDs/2 - (sequence/2); i--){
             l[i] = CHSV(color1, saturation1, 255);
@@ -477,7 +477,7 @@ class LEDstrip
           }
       break;
       
-      //Color Wipe In and out from Sides
+      //WIPE_IN_OUT
       case(42):
         if (state){
           for(int i = 0; i <=sequence / 2; i++){
@@ -496,7 +496,7 @@ class LEDstrip
         }
       break;
 
-      //Color Wipe In and out and back from Sides
+      //WIPE_IN_OUT_BACK
       case(43):
       if (!state2){
         if (!state){
