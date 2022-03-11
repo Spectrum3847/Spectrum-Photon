@@ -66,8 +66,8 @@ enum
   // Commands
   kAcknowledge         , // 0 Command to acknowledge that cmd was received
   kError               , // 1 Command to report errors
-  kSetStrip            , // 2 Command to request add two floats
-  kSetNumLEDSstrip     , // 3 Command to report addition result
+  kSetStrip            , // 2 Command to set a strip
+  kSetNumLEDSstrip     , // 3 Command to set num of leds on a strip
 };
 
 ///////////////////////////////////////////////////////////////////////////
@@ -104,6 +104,7 @@ void setup() {
 
   time = millis();
   oldTime = time;
+  colorSensorSetup();
 }
 
 void loop() {
@@ -131,4 +132,6 @@ void loop() {
     oldTime = 0;
     counter = 0;
   }
+
+  colorSensorLoop();
 }
